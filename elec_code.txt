@@ -1,4 +1,40 @@
-adsasa
-dsasadsada
-dasdsadsad
-而我已经分不清，你是友情，还是错过的爱情
+/****
+ * 把数据存在 List<linkedHashMap<String,Object>>中，将数据灌入excel输出
+ */
+ 
+// InputStream in=scx.getResourceAsStream("/WEB-INF/reportTemplate/服务费订单.xlsx");
+//                ReportUtil.reportByTemplate(in, response.getOutputStream(), recordList);
+
+public class ReportUtil {
+    public static void reportByTemplate(InputStream in, OutputStream os, List<LinkedHashMap<String, Object>> list) {
+        try {
+            // 2007版excel 支持大数据量 最大支持1048576
+            XSSFWorkbook wb = new XSSFWorkbook(in);
+            if(list!=null&&list.size()>0){
+                XSSFSheet sheet=wb.getSheetAt(0);
+                XSSFRow firstRow=sheet.getRow(0);
+                short lastCellNum=firstRow.getLastCellNum();
+                for(int i=0;i<list.size();i++){
+                    XSSFRow row=sheet.createRow(i + 1);
+                    Map<String,Object> map=list.get(i);
+                    Object[] values=map.values().toArray(new Object[0]);
+                    for(int j=0;j<lastCellNum;j++){
+                        XSSFCell cell = row.createCell(j);
+                        cell.setCellValue(values[j]!=null?values[j].toString():"");
+                    }
+                }
+            }
+            wb.write(os);
+            os.flush();
+        } catch (Exception e) {
+            // 2007版excel 支持大数据量 最大支持1048576
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
