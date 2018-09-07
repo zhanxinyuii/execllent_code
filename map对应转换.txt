@@ -1,0 +1,56 @@
+① // 定义一个静态的最后的 map 类型数据
+	private static Map<Integer,Integer> payWayIsInvoiceMap;
+	
+②	// 加载时查询所有 那两个字段 的数据
+	static{
+		if(null==payWayIsInvoiceMap){
+			payWayIsInvoiceMap = getIsInvoiceAll();
+		}
+	}
+	
+③	// 从数据库查询 那两个字段 的数据 原来是 List<Map<String,Object>> 类型	，转换成是 Map<Object,Object> 类型数据
+
+	private static Map<Integer,Integer> getIsInvoiceAll(){
+		SqlSession session=null;
+		Map<String,Map<String,String>> resultMap=null;
+		try {
+			session= ConnectMyBatis.conn(ConnType.READ_SQLSERVER_SETTLECENTER);
+			IInvoiceService mapper=session.getMapper(IInvoiceService.class);
+			// 查询出来的是 以 数据库的 字段名称 为 key，以数据库的 数据值 为 value 的 Map 列表
+			List<Map<String,Integer>> parkMap=mapper.getIsInvoiceAll();
+			if(parkMap!=null && parkMap.size()>0){
+				Map<Integer,Integer> payWayIsInvoiceMap = new HashMap();
+				for(Map<String,Integer> theMap : parkMap)
+				{
+					//以 数据库的 一个字段名称为key，得到value值，把这个值作为 最后的 Map 的 key
+					//以 数据库的 另一个字段名称为key，得到value值，把这个值作为 最后的 Map 的 value
+					payWayIsInvoiceMap.put((Integer)theMap.get("payWay"),(Integer)theMap.get("isInvoice"));
+				}
+			}
+		} catch (Exception e) {
+			LogProvider.getErrorLogger().error("##getIsInvoiceAll获取支付方式是否支持电子发票信息异常：error:{}",e.getMessage(),e);
+		}finally{
+			if(session!=null){
+				session.close();
+			}
+		}
+		return payWayIsInvoiceMap;
+	}
+	
+④  // 传入 要查的数据（payway），得到对应的数据（isInvoice）	
+	public Integer getIsInvoice(Integer payWay){
+		try {
+			if(null != payWayIsInvoiceMap){
+				if(null != payWayIsInvoiceMap.get(payWay)){
+					return payWayIsInvoiceMap.get(payWay);
+				}else{
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			LogProvider.getErrorLogger().error("##getIsInvoice获取支付方式是否支持电子发票信息异常：payWay:{},error:{}",payWay,e.getMessage(),e);
+		}
+		return null;
+	}
+	
+	
