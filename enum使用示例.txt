@@ -1,0 +1,44 @@
+public enum CheckSettleTypeEnum {
+
+    TIMES  (1, "每笔结算"),
+    MONTH    (2, "按月结算");
+
+    private Integer key;
+    private String value;
+
+
+    private CheckSettleTypeEnum(Integer key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public static String getValueByKey(Integer key) {
+
+        for (CheckSettleTypeEnum dot : CheckSettleTypeEnum.values()) {
+            if (key.equals(dot.getKey())) {
+                return dot.getValue();
+            }
+        }
+        return "";
+    }
+
+    public static List<Map<String,Object>> getList() {
+
+        List<Map<String,Object>> list = Lists.newArrayList();
+        for (CheckSettleTypeEnum dot : CheckSettleTypeEnum.values()) {
+            Map<String,Object> map  = Maps.newHashMap();
+            map.put("key",dot.getKey());
+            map.put("value",dot.getValue());
+            list.add(map);
+        }
+        return list;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public Integer getKey() {
+        return key;
+    }
+}
