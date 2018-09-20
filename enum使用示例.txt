@@ -1,3 +1,5 @@
+使用示例1 --------------------------------------------------------------------
+
 public enum CheckSettleTypeEnum {
 
     TIMES  (1, "每笔结算"),
@@ -41,4 +43,23 @@ public enum CheckSettleTypeEnum {
     public Integer getKey() {
         return key;
     }
+}
+
+使用示例2 --------------------------------------------------------------------
+
+public class InvoiceTest {
+
+    public static void main(String[] args) {
+
+        InvoiceTest test = new InvoiceTest();
+        test.say(HOUR);
+    }
+    public enum DATE_DIFF_FORMAT {
+        LONG, HOUR, HOUR_MINUTE, HOUR_MINUTE_SECOND
+    }
+
+    public  void say(DATE_DIFF_FORMAT format){
+        System.out.println(format);
+    }
+
 }
