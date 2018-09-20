@@ -1,0 +1,29 @@
+    @Test
+    public void testStr(){
+        String str = "abcdefabc";
+        // 第一种方法 适用于 在一个字符串里所有出现的 ' b ' 后 加字符串，最繁琐
+        String[] strs1 = str.split("b");
+        for(String strr : strs1){
+            System.out.println(strr);
+        }
+        String changeStr = "z"+strs1[1];
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<strs1.length; i++){
+            if(i == 1){ sb.append(changeStr + "b"); continue;}
+            if(i == (strs1.length -1)){  sb.append(strs1[i]);continue; }
+            sb.append(strs1[i] + "b");
+        }
+        String finalStr = sb.toString();
+
+        // 第二种方法 适用于在第一次出现b的后面加字符串
+        int index = str.indexOf("b");
+        StringBuilder sb2 = new StringBuilder(str);
+        sb2.insert(index+1,"z");
+        
+        String finalStr2 = sb2.toString();
+
+        // 第三种方法 适用于在第一次出现b的后面加字符串 ，如果想改成所有的 就跟方法一差不多了
+        String[] strs = str.split("b");
+        String finalStr3 = strs[0] + "bz" + strs[1];
+
+    }
