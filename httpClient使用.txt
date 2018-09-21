@@ -1,0 +1,75 @@
+httpGet使用 ------------------------------------------
+    @Test
+    public void testHttpGet(){
+        // 1. 创建HttpClient对象
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 2. 创建HttpGet对象
+        HttpGet httpGet = new HttpGet(
+                "http://etcpservice.test.etcp.cn/service/user/getUserByPhone?phone=18646329647");
+        CloseableHttpResponse response = null;
+        try {
+            // 3. 执行GET请求
+            response = httpClient.execute(httpGet);
+            System.out.println(response.getStatusLine());
+            // 4. 获取响应实体
+            org.apache.http.HttpEntity entity = response.getEntity();
+            // 5. 处理响应实体
+            if (entity != null) {
+                System.out.println("长度：" + entity.getContentLength());
+                System.out.println("内容：" + EntityUtils.toString(entity));
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 6. 释放资源
+            try {
+                response.close();
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+	
+httpPost使用 -----------------------------------------
+    @Test
+    public void testHttpPost(){
+        // 1. 创建HttpClient对象
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 2. 创建HttpPost对象
+        HttpPost post = new HttpPost(
+                "http://bsapi.qa.etcp.cn/service/admin/getSecretId");
+        // 3. 设置POST请求传递参数
+        List<NameValuePair> params = new ArrayList<>();
+		// 注意 这里的 键值对 的键不能加等号了
+        params.add(new BasicNameValuePair("id", "1000381"));
+        try {
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params);
+            post.setEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        // 4. 执行请求并处理响应
+        try {
+            CloseableHttpResponse response = httpClient.execute(post);
+            HttpEntity entity = response.getEntity();
+            if (entity != null){
+                System.out.println("响应内容：");
+                System.out.println(EntityUtils.toString(entity));
+            }
+            response.close();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 释放资源
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }	
