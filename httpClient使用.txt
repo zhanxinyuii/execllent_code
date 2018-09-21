@@ -8,6 +8,8 @@ httpGet使用 ------------------------------------------
                 "http://etcpservice.test.etcp.cn/service/user/getUserByPhone?phone=18646329647");
         CloseableHttpResponse response = null;
         try {
+			// 设置http头部
+			 httpGet.setHeader("Accept","application/json;charset=UTF-8");
             // 3. 执行GET请求
             response = httpClient.execute(httpGet);
             System.out.println(response.getStatusLine());
@@ -53,6 +55,8 @@ httpPost使用 -----------------------------------------
         }
         // 4. 执行请求并处理响应
         try {
+			// 设置http头部
+			post.setHeader("Accept","application/json;charset=UTF-8");
             CloseableHttpResponse response = httpClient.execute(post);
             HttpEntity entity = response.getEntity();
             if (entity != null){
