@@ -1,0 +1,71 @@
+// http post请求
+        String url = new String("http://bsapi.qa.etcp.cn/service/admin/getSecretId");
+        // 构建连接体
+        HttpURLConnection connection = (HttpURLConnection)(new URL(url)).openConnection();
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setUseCaches(false);
+        connection.setRequestMethod("POST");
+        // 添加 http 头部
+        HashMap<String,String> header = new HashMap<>();
+        header.put("Accept","application/json;charset=UTF-8");
+        // 向连接里设置头部信息
+        if(Arrays.isNotNullOrEmpty(header)) {
+            Iterator resultBuilder = header.keySet().iterator();
+
+            while(resultBuilder.hasNext()) {
+                String writer = (String)resultBuilder.next();
+                connection.setRequestProperty(writer, (String)header.get(writer));
+            }
+        }
+        // 构建 http 的 body 体
+        StringBuilder body=new StringBuilder();
+        body.append("id=").append(1000381);
+        // 设置 body 体
+        BufferedWriter writer1 = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        writer1.write(body.toString());
+        writer1.flush();
+        // 获取HTTP响应的时候，请求就会自动的发起
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line = "";
+        // readLine() 函数调用时 就完成了请求
+        while((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+
+        System.out.println(sb);
+        br.close();
+		
+		
+// http get请求
+        String url = new String("http://etcpservice.test.etcp.cn/service/user/getUserByPhone?phone=18646329647");
+        HttpURLConnection connection = (HttpURLConnection)(new URL(url)).openConnection();
+        connection.setDoOutput(false);
+        connection.setDoInput(true);
+        connection.setUseCaches(false);
+        connection.setRequestMethod("GET");
+
+         // 添加 http 头部
+        HashMap<String,String> header = new HashMap<>();
+        header.put("Accept","application/json;charset=UTF-8");
+        // 向连接里设置头部信息
+        if(Arrays.isNotNullOrEmpty(header)) {
+            Iterator resultBuilder = header.keySet().iterator();
+
+            while(resultBuilder.hasNext()) {
+                String writer = (String)resultBuilder.next();
+                connection.setRequestProperty(writer, (String)header.get(writer));
+            }
+        }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line = "";
+
+        while((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        
+        System.out.println(sb);
+        br.close();		
