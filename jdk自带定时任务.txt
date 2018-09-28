@@ -1,0 +1,14 @@
+public class AccountTask {
+    public static void main(String[] args) {
+
+
+        ScheduledExecutorService service= Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(new Runnable(){
+            @Override
+            public void run() {
+               System.out.println(new Date());
+
+            }
+        },1,5, TimeUnit.SECONDS);
+    }
+}
