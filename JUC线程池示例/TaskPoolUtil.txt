@@ -1,0 +1,68 @@
+/**
+ *@项目名称: fmis-server
+ *@文件名称: TaskPoolUtil.java
+ *@Date: 2015年10月30日
+ *@Copyright: 2015 悦畅科技有限公司. All rights reserved.
+ *注意：本内容仅限于悦畅科技有限公司内部传阅，禁止外泄以及用于其他的商业目的
+ */
+package cn.etcp.fmis.util;
+
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import jersey.repackaged.com.google.common.collect.Lists;
+
+/**
+ * @Description: 任务池工具类
+ * @Author Guojw
+ * @Date 2015年10月30日 上午10:41:08 
+ * @Version V1.0
+ */
+public class TaskPoolUtil<T> {
+
+	private static ExecutorService exec = Executors.newFixedThreadPool(10);
+	private Queue<Future<T>> queue = new ConcurrentLinkedQueue<Future<T>>();
+
+	public TaskPoolUtil<T> submit(Callable<T> ...tasks){
+		for(Callable<T> task:tasks){
+			queue.add(exec.submit(task));
+		}
+		return this;
+	}
+
+	public ArrayList<T> getResult(int timeout,TimeUnit unit) throws InterruptedException, ExecutionException{
+
+		ArrayList<T> result = Lists.newArrayList();
+		final long deadline = System.nanoTime() + unit.toNanos(timeout);
+		while(!queue.isEmpty()){
+			Future<T> fs = queue.poll();
+			if(fs.isDone()){
+				result.add(fs.get());
+			}else{
+				queue.offer(fs);
+			}
+			if (deadline - System.nanoTime() <= 0L){
+				while(!queue.isEmpty()){
+					Future<T> waitFs = queue.poll();
+					waitFs.notifyAll();
+					TimeUnit.MILLISECONDS.sleep(100);
+					if(fs.isDone()){
+						waitFs.cancel(true);
+					}
+				}
+				break;
+			}
+			//System.out.println("执行了");
+			TimeUnit.MILLISECONDS.sleep(100);
+		}
+		return result;
+	}
+
+}

@@ -1,0 +1,17 @@
+class mainTest{
+	public static void main(String[] args){
+		  // 创建线程池
+            TaskPoolUtil<Integer> pool = new TaskPoolUtil<Integer>();
+
+            // 线程执行
+            for(int i=0; i<5; i++) {
+                pool.submit(new TTest(i));
+            }
+
+            // 过后可获取返回结果
+            List<Integer> resultList = pool.getResult(300, TimeUnit.SECONDS);
+            for(Integer ii : resultList){
+                System.out.println(ii);
+            }
+	}
+}

@@ -1,0 +1,25 @@
+package cn.etcp.common;
+
+import java.util.concurrent.Callable;
+
+/**
+ * Created by Administrator on 2018/10/8.
+ */
+public class TTest implements Callable<Integer>{
+
+    private int i;
+
+    public TTest(int i) {
+        this.i = i;
+    }
+
+    @Override
+    public Integer call() throws Exception {
+
+        // 具体完成的业务
+        System.out.println("我是第 " + i + " 个");
+
+        // 过后可拿到的返回值
+        return i+1000;
+    }
+}
