@@ -1,0 +1,95 @@
+public boolean notify() {
+        CloseableHttpClient httpClient = null;
+        String resultString;
+        try {
+            Map notifyMap = new HashMap<>(8);
+            
+
+            httpClient = HttpClients.custom().setSSLSocketFactory(MySSLSocketFactory.getInstance()).build();
+            HttpPost postMethod = new HttpPost(url);
+            postMethod.setConfig(HttpUtils.requestConfig);
+            //json格式的数据
+            StringEntity stringEntity = new StringEntity(JSON.toJSONString(notifyMap), "UTF-8");
+            stringEntity.setContentEncoding("UTF-8");
+            stringEntity.setContentType("application/json");
+            postMethod.setEntity(stringEntity);
+          
+            HttpResponse response = httpClient.execute(postMethod);
+            resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
+    
+            ServiceResult serviceResult = JSON.parseObject(resultString, ServiceResult.class);
+            return serviceResult.success();
+        } catch (Exception e) {
+            LOGGER.error("通知企业付款失败: " + e.toString(), e);
+        } finally {
+            if (httpClient != null) {
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    LOGGER.warn(e.toString(), e);
+                }
+            }
+        }
+
+        return false;
+    }
+	
+class MySSLSocketFactory extends SSLSocketFactory {
+    
+    static {
+        mySSLSocketFactory = new MySSLSocketFactory(createSContext());
+    }
+    
+    private static MySSLSocketFactory mySSLSocketFactory = null;
+    
+    private static SSLContext createSContext() {
+        SSLContext sslcontext = null;
+        try {
+            sslcontext = SSLContext.getInstance("SSL");
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        try {
+            sslcontext.init(null, new TrustManager[]{new TrustAnyTrustManager()}, null);
+        }
+        catch (KeyManagementException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return sslcontext;
+    }
+    
+    @SuppressWarnings("deprecation")
+	private MySSLSocketFactory(SSLContext sslContext) {
+        super(sslContext);
+        this.setHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER);
+    }
+    
+    public static MySSLSocketFactory getInstance() {
+        if (mySSLSocketFactory != null) {
+            return mySSLSocketFactory;
+        }
+        else {
+            return mySSLSocketFactory = new MySSLSocketFactory(createSContext());
+        }
+    }
+    
+}
+
+class TrustAnyTrustManager implements X509TrustManager {
+    
+    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        
+    }
+    
+    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        
+    }
+    
+    public X509Certificate[] getAcceptedIssuers() {
+        return null;
+    }
+    
+}
+
