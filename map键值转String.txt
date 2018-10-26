@@ -1,0 +1,30 @@
+@Test
+public void MapToStringWith&{
+	  Map<String, String> data = new HashMap<>();
+        data.put("noticeUrl","https://...");
+        data.put("param2","value2");
+        data.put("branchNo","0755");
+        data.put("merchantNo","002346");
+        data.put("noticeType","noticeType");
+        data.put("noticeSerialNo","201606238888888");
+
+
+        TreeMap<String, String> tree = new TreeMap<String, String>();
+        Iterator<Map.Entry<String, String>> it = data.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> en = it.next();
+            if (SDKConstants.param_signature.equals(en.getKey().trim())) {
+                continue;
+            }
+            tree.put(en.getKey(), en.getValue());
+        }
+        it = tree.entrySet().iterator();
+        StringBuffer sf = new StringBuffer();
+        while (it.hasNext()) {
+            Map.Entry<String, String> en = it.next();
+            sf.append(en.getKey() + SDKConstants.EQUAL + en.getValue()
+                    + SDKConstants.AMPERSAND);
+        }
+        System.out.println( sf.substring(0, sf.length() - 1));
+
+}
