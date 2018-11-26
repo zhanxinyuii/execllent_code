@@ -1,0 +1,40 @@
+public class ThreadLocalTest {
+
+    private static final ThreadLocal<Integer> threadSession = new ThreadLocal<>();
+
+    public static Integer getSession() {
+        Integer s =  threadSession.get();
+        try {
+            if (s == null) {
+                System.out.println(Thread.currentThread().getName() + " 现在没有值");
+                s = new Random().nextInt(100);
+                threadSession.set(s);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return s;
+    }
+
+    public static void main(String[] args) {
+        for(int i=0;i<3; i++){
+           Thread t = new Thread(new ThreadDemo());
+            t.start();
+        }
+    }
+}
+
+class ThreadDemo implements Runnable{
+    @Override
+    public void run() {
+        for(int i=0; i<3; i++){
+            Integer num = ThreadLocalTest.getSession();
+            System.out.println(Thread.currentThread().getName() + " -- "+ num);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
