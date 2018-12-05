@@ -1,0 +1,63 @@
+class TTest{
+	@org.junit.Test
+    public void testInt(){
+       int a = 1;
+        String b = "hello";
+        Integer c = 200;
+
+        int[] d = {1, 2, 3, 4, 5};
+        data e = new data();    e.setA(10);
+
+        StringBuilder sb1 = new StringBuilder("ni");
+        StringBuffer sb2 = new StringBuffer("ha");
+
+        List<Integer> l = new ArrayList<>();
+        l.add(10);
+        Map<String, String> m = new HashMap();
+        m.put("a", "aaaaa");
+
+        sset(a, b, c, d, e, sb1, sb2, l, m);
+
+		// 这仨基本数据类型的不变 别的都变了
+        System.out.println(a);				// 1
+        System.out.println(b);				// hello
+        System.out.println(c);				// 200
+		
+        System.out.println(d[0]);			// 101
+        System.out.println(e.getA());		// 11
+
+        System.out.println(sb1.toString()); // nihao
+        System.out.println(sb2.toString()); // haha
+
+        System.out.println(l.size());		// 2
+        System.out.println(m.size());		// 2
+
+    }
+
+      private static void sset(int a, String b, Integer c, int[] d, data e, StringBuilder sb1, StringBuffer sb2, List l, Map m) {
+        a = a + 1;
+        b = b + "world";
+        c = c + 3;
+        d[0] = d[0] + 100;
+        e.setA(11);
+
+        sb1.append("hao");
+        sb2.append("ha");
+
+        l.add(30);
+        m.put("b", "bbbbb");
+    }
+
+}
+
+class data {
+    int a;
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+}

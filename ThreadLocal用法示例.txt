@@ -1,3 +1,5 @@
+http://www.iteye.com/topic/103804
+
 public class ThreadLocalTest {
 
     private static final ThreadLocal<Integer> threadSession = new ThreadLocal<>();

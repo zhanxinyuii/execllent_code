@@ -1,0 +1,22 @@
+spring中Constructor、@Autowired、@PostConstruct的顺序
+
+其实从依赖注入的字面意思就可以知道，要将对象p注入到对象a，那么首先就必须得生成对象p与对象a，才能执行注入。所以，如果一个类A中有个成员变量p被@Autowired注解，那么@Autowired注入是发生在A的构造方法执行完之后的。
+
+如果想在生成对象时候完成某些初始化操作，而偏偏这些初始化操作又依赖于依赖注入，那么就无法在构造函数中实现。为此，可以使用@PostConstruct注解一个方法来完成初始化，@PostConstruct注解的方法将会在依赖注入完成后被自动调用。
+
+Constructor >> @Autowired >> @PostConstruct
+
+举个例子:
+public Class AAA {
+    @Autowired
+    private BBB b;
+    
+    public AAA() {
+        System.out.println("此时b还未被注入: b = " + b);
+    }
+ 
+    @PostConstruct
+    private void init() {
+        System.out.println("@PostConstruct将在依赖注入完成后被自动调用: b = " + b);
+    }
+}
