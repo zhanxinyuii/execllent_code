@@ -33,3 +33,83 @@ class Father{
     }
 
 }
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+pubic class testOrder{
+	 @org.junit.Test
+    public void testInt() {
+        // f - 1  ,  f - 5 ,  f - 3  ,  f - 4 ,  f - 2
+        Father f = new Father();
+    }
+}
+
+class Father{
+
+    static{
+        System.out.println("f - 1");
+    }
+
+    Father(){
+        System.out.println("f - 2");
+    }
+
+    {
+        System.out.println("f - 3");
+    }
+
+    public int test(){
+        System.out.println("f - 4");
+        return  1;
+    }
+    
+    public static int method(){
+        System.out.println("f - 5");
+        return 1;
+    }
+	
+	private int i = test();
+    private static int j = method();
+	
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pubic class testOrder{
+	@org.junit.Test
+    public void testInt() {
+        // f - 5  ,  f - 1 ,  f - 4  ,  f - 3 ,  f - 2  || f - 4  ,  f - 3 ,  f - 2
+        Father f = new Father();
+        System.out.println("");
+        Father f2 = new Father();
+    }
+}
+
+
+class Father{
+    private int i = test();
+    private static int j = method();
+
+    static{
+        System.out.println("f - 1");
+    }
+
+    Father(){
+        System.out.println("f - 2");
+    }
+
+    {
+        System.out.println("f - 3");
+    }
+
+    public int test(){
+        System.out.println("f - 4");
+        return  1;
+    }
+
+    public static int method(){
+        System.out.println("f - 5");
+        return 1;
+    }
+
+}
