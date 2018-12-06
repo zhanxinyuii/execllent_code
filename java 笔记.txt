@@ -1,0 +1,510 @@
+1.把 流 理解成把管道插入文件中进行读出或写入，BufferedReader和（处理流）理解为更大的管道接   在使用的小管道上，不直接与数据相连，它包在小管道上，有缓存区，先读出或写在缓存区里，再一次性写入或读出，保护硬盘。
+
+
+2. 集合框架 set 装的是无序，不可重复的数据。
+
+3.增强 for 语句用法
+
+        for(int i : collection)		// 把 collection 中的元素从头到尾赋给i
+	{
+	    System.out.println(i);
+	}
+	for(Object set ：collection)    // 同理
+	{
+	    System.out.println(set);
+	}
+
+4.集合框架 list 装的是有序，可以重复的数据。
+
+5.有锁的线程 sleep()的时候还持有那把锁， wait()的时候 不持有锁 醒了以后持有。
+
+6.map 的key(键) , value(值) 都得是对象 ，如 可是 new Integer(3), 不能直接写 3。
+
+7.字节流：二进制，可以处理一切文件，包括纯文本，doc,音频，视频等
+  字符流：文本文件，只能处理纯文本。
+
+8. 在	“http://www.sina.com/” 中
+	http://www.sina.com    是URL
+	www.sina.com	       是主机名
+	sina.com	       是域名
+
+9.子类在覆盖父类的方法时，不能抛出比父类更多的异常(子类应该比父类更优秀)
+
+10.filepath=URLDecoder.decode(filepath, "UTF-8");    // 设置URL解码，防止把空格翻译成‘%20’ 从而导致找不到指定指定路径
+
+11.
+	Class.forName("")返回的是类，作用是要求JVM查找并加载指定的类，如果在类中有静态初始化器的话，JVM必然会执行该类的静态代码段
+	Class.forName("").newInstance()返回的是object，newInstance()实际上是把new这个方式分解为两步，
+                               即首先调用Class加载方法加载某个类，然后实例化（有点像new出一个对象）
+12.事务：定义在事务中的sql语句要么全执行，要么全不执行
+	start transaction;
+	commit;
+
+13.当发现方法的功能不够使时有三种解决方法：
+	1：写一个子类，覆盖方法，增强方法（不常用），因为通常还有很多信息要带给他
+	2：用包装设计模式
+	3：使用动态代理
+
+	包装设计模式：
+	1.定义一个类，实现与被增强相同的接口
+	2.在类中定义一个变量，记住被增强对象
+	3.定义一个构造函数接收被增强对象
+	4.覆盖想增强的方法
+	5.对于不想增强的方法，直接调用目标对象（被增强对象）的方法
+
+14.转自 day17 - DepartmentDao
+   Department d = (Department) runner.query(sql, id, new BeanHandler(Department.class));
+   表示把查询的结果封装到一个Department对象中
+
+15.mysql自动维护删除后表间关系的删除（主键的删除）-->级联
+
+   1）on delete set null   --  删除后外键置空
+	el:  constraint department_id_FK foreign key(department_id) references department(id) on delete set null;
+   1）on delete cascade   --  删除后其子关联部分也删除
+	el:  constraint department_id_FK foreign key(department_id) references department(id) on delete cascade;
+
+16.启动服务器时servletContext被创建
+   访问资源时session被创建，关闭浏览器session驻留在内存中 30分钟没人用了才摧毁
+
+17.@Retention(RetentionPolicy.RUNTIME)
+	说明注解在运行时可用，重要
+
+18.tomcat不使用父类加载机制，当类似 Dog d = (Dog)new Cat(); 会出现类型转换异常
+   这是tomcat的jar包和 web应用jar包冲突，去掉web的jar包即可。
+
+19.statment和prepareStatement(防注入)的区别
+  （1）prepareStatement是statment的孩子
+  （2）prepareStatement可以防止sql注入
+  （3）prepareStatement会对sql语句进行预编译，以减轻数据库服务器的压力。预编译对象就是把一些格式固定的SQL编译后，存放在内存池中即数据库缓冲池，当我们再次执行相同的SQL语句时就不需要预编译           的过程了，只需DBMS运行SQL语句。所以当你需要执行Statement对象多次的时候，PreparedStatement对象将会大大降低运行时间
+           对sql进行预编译，用 ? 代替参数位置这种方式能防范SQL注入的原理是在SQL参数未注入之前，提前对SQL语句进行预编译，而其后注入的参数将不会再进行SQL编译。也就是说其后注入进来的参数系统将不           会认为它会是一条SQL语句，而默认其是一条一个参数。
+
+20.1、request：如果客户向服务器发请求，产生的数据，用户看完就没用了，像这样的数据就存在request域,
+		像新闻数据，属于用户看完就没用的
+   2、session：如果客户向服务器发请求，产生的数据，用户用完了等一会儿还有用，
+		像这样的数据就存在session域中，像购物数据，用户需要看到自己购物信息，
+		并且等一会儿，还要用这个购物数据结帐
+   3、servletContext：如果客户向服务器发请求，产生的数据，用户用完了，还要给其它用户用，
+		      像这样的数据就存在servletContext域中，像聊天数据
+		      一个web应用中所有servlet共享同一个servletcontext对象
+   4、pageContext：也是一个域对象，域的生命周期是整个页面的周期，作用域是整个页面，四个域中，
+		   作用范围最小的一个,request就是一个请求范围内，session就是在一个会话范围内，
+	    	   servletContext整个web应用
+
+21.java小项目开发流程 ： 先写 javabean 再写 dao 再写 service 再写 servlet 再写 jsp
+
+22.使用tomcat 服务器内置的 数据库连接池时，必须把mysql的jar包加入到 web服务器的lib目录下
+
+23.子类不能抛比父类更多的异常
+
+24.有的接口如: Serializable, SingleThreadModel, Cloneable 是标志接口，接口里无方法，相当于为类打了
+   一个戳，表示此类可以干什么什么事
+
+25.提交数据中文乱码问题
+  ①如果提交方式是post， 只需设置request的编码就行
+    request.setCharactorEncoder("UTF-8");
+    注意：客户机数据是以哪种编码提交的，request就该设什么编码
+  ②如果提交方式是get，设置request对象的编码是无效的，只能手工切换
+    String data = "???????"; // 假设这是那个乱码
+
+    byte source[] = data.getBytes("iso8859-1"); // 得到客户机的原始数据
+    data = new String(source,"UTF-8");
+    等同于
+    data = new String(data.getBytes("iso8859-1"),"UTF-8");
+
+26.springmvc有自己的数据校验框架，类位于org.springframework.validation包中
+
+27.浏览器本地化会包含在html请求报头的Accept-Language参数将 语言首选项对话框中选择的语言发送到服务器，成为服务器判别客户端本地化类型的依据,此外还可以通过
+   Cookie或Session等特殊方法进行判断，项目中通常把本地化信息保存在数据库中，用户登录先把个性化信息加载到相应媒介中（Cookie或Session中）。
+
+28.springMVC为文件上传提供支持，MultipartResolver
+
+29. 1）BlockingQueue,如果BlockQueue是空的,从BlockingQueue取东西的操作将会被阻断进入等待状态,直到BlockingQueue进了东西才会被唤醒.
+   同样,如果BlockingQueue是满的,任何试图往里存东西的操作也会被阻断进入等待状态,直到BlockingQueue里有空间才会被唤醒继续操作
+   （类似于生产者消费者问题）
+    2）SynchronousQueue是这样 一种阻塞队列，其中每个 put 必须等待一个 take，反之亦然。即如果没人来取数据，就不会往队列里放数据
+       （毒贩交易）
+
+30.springmvc的容器属于spring容器的子容器，子容器能访问父容器的内容，反之不行。
+   springmvc配置扫描器只扫描 controller， spring配置不扫描controller
+
+31.ModelAndView 原理是 遍历这个Map集合，把属性值一个一个放到request域里
+
+32.Mybatis的Mapper接口没有实现类，但Mybatis会为其生成一个代理对象
+
+33.javabean一定要写上无参构造器，因为是很多框架反射的源泉，要是没有，很多框架不能工作
+
+
+34.如果spring和springMVC的IOC容器都配置了context:component-scan base-packet= 。。。 则二者扫描的包有重合部分
+   会导致有的bean会被二次加载。
+   解决：springmvc容器配置只扫描@controller注解：
+   <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+  
+   spring的容器配置扫描除了@controller的注解
+   <context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+
+35.springMVC 的 ioc容器中的bean可以引用spring的ioc容器中的bean(在handler里 @Autowired service)
+   反之不行(在service里 @Autowired handler)不行
+
+36.<context:component-scan base-package=""> 配置的作用是扫描base-package里面的bean(包括)pojo,service,handler等
+   避免了在xml文件里手动去写了。spring和springMVC有他们分别的IOC容器。
+
+37.spring的AOP配置（以事务为例）
+
+   ①配置拥有数据源的事务管理器transactionManager --- <bean>
+   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!--控制住数据源  -->
+		<property name="dataSource" ref="pooledDataSource"></property>
+   </bean>
+
+   ②配置 增强 ，和事务如何切入 --- <aop:advice>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 所有方法都是事务方法 -->
+			<tx:method name="*"/>
+			<!--以get开始的所有方法  -->
+			<tx:method name="get*" read-only="true"/>
+		</tx:attributes>
+    </tx:advice>
+
+    ③配置增强织入 --- <aop:config>
+    <aop:config>
+		<!-- 切入点表达式 -->
+		<aop:pointcut expression="execution(* com.atguigu.crud.service..*(..))" id="txPoint"/>
+		<!-- 配置事务增强 (把增强和切入点联系起来)-->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+    </aop:config>
+    
+38.spring整合mybatis的配置中sqlSessionFactory中为什么配置 mapperLocations:
+	当mybatis的xml文件和mapper接口不在相同包下时，需要用mapperLocations属性指定xml文件的路径
+
+39.在web项目里 象二维数组、stack、List等数据结构一定要在前面显式地定义声明出来,就是后面的 = new ArrayList(); = new int[10][10];等（除了spring的自动注入），否则出现 NullPointerException 空指针异常
+   重要的事情说三遍 ！！！
+   在web项目里 象二维数组、stack、List等数据结构一定要在前面显式地定义声明出来,就是后面的 = new ArrayList(); = new int[10][10];等，否则出现 NullPointerException 空指针异常
+   重要的事情说三遍 ！！！
+   在web项目里 象二维数组、stack、List等数据结构一定要在前面显式地定义声明出来,就是后面的 = new ArrayList(); = new int[10][10];等，否则出现 NullPointerException 空指针异常
+   重要的事情说三遍 ！！！
+
+40.定义数据结构时要谨慎使用 static，例如 List的 add 操作，你第二次发送请求时，还是在原 list 上加，导致list内容出错
+
+41.ssm的用户修改中
+	@RequestMapping(value="/emp/{empId}",method=RequestMethod.PUT)
+	//  ***********路径上带的 empId 被自动封装到函数入参 employee对象中 ****************
+	public Msg saveEmp(Employee employee)
+	{
+		employeeService.updateEmp(employee);
+		return Msg.success();
+	}
+
+42.@RequestMapping("/checkuser")
+	public Msg checkuser(@RequestParam("empName")String empName)
+	｛｝
+   这里的 @RequestParam("empName")String empName，也就是入参，（如果页面用的是ajax请求）ajax 的 data 参数值是前面的入参值
+							      （如果是直接表单的action提交），表单数据也可以这样获得
+
+43.在js中 返回值是标准属性的 如是 true/false  比如 $("#checkbox").prop('disabled') 用prop()
+   有各种返回值的用attr()
+
+44.Controller 里的 @ResponseBody 作用：
+   官方理解：@ResponseBody 的作用是把返回值直接写到HTTP response body里
+   我的理解：把返回值做成json串，这样在 ajax 函数的 result 结果里就能拿到这个 json 进行点式获取，如
+	     success:function(result)
+	     {
+		var empData = result.extend.emp;							
+             }
+
+45.tomcat的 session序列化
+	应用场景：一般来说，服务器启动后，就不会再关闭了，但是如果逼不得已需要重启，而用户会话还在进行相应的操作，这时就需要使用序列化将session信息保存起来放在硬盘，服务器重启后，又重新加载。这样就保证了用户信息不会丢失，实现永久化保存
+	序列化和反序列化：什么是序列化？把对象的状态信息转换为可以存储或传输的形式过程，简单说就是把对象转换为字节形式存储的过程称为对象的序列化
+			  什么是反序列化？把字节序列转化为对象的过程
+	钝化和活化：当一个用户长时间不进行操作的时，服务器为减轻内存压力，可以将其session保存到硬盘中，等待用户再次操作的时候，再从硬盘中取出来,(保存到硬盘中的信息不会删除）
+要完成session持久化，存放在session里的对象必须要实现java.io.Serializable 接口。
+
+46.jvm内存空间：
+    ①方法区：是各个线程共享的内存区域，用于储存已被虚拟机加载的类信息，常量，静态变量，即时编译器编译后的代码等数据
+    ②java栈：线程私有，存储局部变量表，操作数，动态链接，方法出口
+    ③java堆：是各个线程共享的内存区域，虚拟机启动时创建，唯一目的是存放对象实例。
+    ④jvm本地方法栈：与栈发挥的功能相似，区别是栈为虚拟机执行java方法服务，本地栈为虚拟机使用到的Native方法服务。
+    ⑤程序计数器：
+
+47.类加载器将 class 文件加载到内存中，采用父类委托机制
+   优点：提高软件系统的安全性，用户自定义的类加载器不能加载本应该由父加载器加载的可靠类，从而防止不可靠的恶意代码代替由父类加载器加载的可靠代码
+      	 如： 我不能自定义 String 类
+  
+48.面向接口编程：List是一个接口，而ArrayList 是一个类。 ArrayList 继承并实现了List。
+	List list = new ArrayList();这句创建了一个ArrayList的对象后把上溯到了List。此时它是一个List对象了，有些ArrayList有但是List没有的属性和方法，它就不能再用了。而ArrayList list=new 	ArrayList();创建一对象则保留了ArrayList的所有属性。
+	为什么一般都使用 List list = new ArrayList() ,而不用 ArrayList alist = new ArrayList()呢？ 
+	问题就在于List有多个实现类，如 LinkedList或者Vector等等，现在你用的是ArrayList，也许哪一天你需要换成其它的实现类呢？，这时你只要改变这一行就行了：List list = new LinkedList(); 其它	使用了list地方的代码根本不需要改动。假设你开始用 ArrayList alist = new ArrayList(), 这下你有的改了，特别是如果你使用了 ArrayList特有的方法和属性。  ,如果没有特别需求的话,最好使用	List list = new LinkedList(); ,便于程序代码的重构. 这就是面向接口编程的好处
+
+49.在并发场景中，ConcurrentHashMap 较之 HashMap是更好的选择
+   在读多写少的并发场景下，CopyOnWriteArrayList 较之 ArrayList 是更好的选择
+
+50.springboot的@RestController和 原始的@controller注解的区别
+  在@controller注解中，返回的是字符串，或者是字符串匹配的模板名称，即直接渲染视图，与html页面配合使用的， 
+  在这种情况下，前后端的配合要求比较高，java后端的代码要结合html的情况进行渲染,使用model对象（或者modelandview）的数据将填充user视图中的相关属性，然后展示到浏览器，这个过程也可以称为渲染
+
+  而在@restcontroller中，返回的应该是一个对象，即return一个user对象，这时，在没有页面的情况下，也能看到返回的是一个user对象对应的json字符串，而前端的作用是利用返回的json进行解析渲染页面，  java后端的代码比较自由。
+
+  1)如果只是使用@RestController注解Controller，则Controller中的方法无法返回jsp页面，配置的视图解析器InternalResourceViewResolver不起作用，返回的内容就是Return 里的内容。 
+    例如：本来应该到success.jsp页面的，则其显示success.
+
+  2)如果需要返回到指定页面，则需要用 @Controller配合视图解析器InternalResourceViewResolver才行。
+
+  3)如果需要返回JSON，XML或自定义mediaType内容到页面，则需要在对应的方法上加上@ResponseBody注解
+
+************************************************************************************
+51.maven工程有感叹号处理方法：
+	https://jingyan.baidu.com/article/86fae346f63b233c49121aa3.html
+************************************************************************************
+
+52.出现 jar 包失效，但 maven依赖 或 Reference libraries里还有这个jar包的情况
+   可能是本地仓库的jar包失效，点击jar包前的下拉符号，若没东西，则jar包失效
+   ***********本地仓库里的 springframework 的 4.3.7 REALESE 系列就 失效了**********
+
+53. html中 <c:foreach> 中的 var = item 在函数体里获取 需要用 ${item}
+    js中 $.each里的function(index,item) 在函数体里获取 可直接用 item
+
+***************************************************************************************
+54.Linux连接ssh
+	①.把网络设置为桥接
+	②.先 su 切换为 root模式
+	③.命令 vim /etc/sysconfig/network-scripts/ifcfg-eth0 编辑 网络配置信息
+	④.修改ip地址和宿主ip地址为一个网段
+    如 ： 第一种方法（能连ssh也能上网）：
+	BOOTPROTO 改为 dhcp	
+
+	第二种方法（能连ssh,不能上网，不能yum下东西）：
+	BOOTPROTO 改为 static
+	IPADDR 改为只有最后一段不一样
+	GATEWAY 改成和 windows使用ipconfig查出来的gateway一样
+
+55.equals的空指针异常问题:
+	变量.equals("常量") 如 str.euqals("1") 可能出现空指针异常
+  	尽量用 ("常量").equals(变量) 如 ("1").equals(str)
+	原因：问题是出现在调用方法上了。因为null值，并不是一个String对象。而你通过声明的String对象引用去 调用了String对象的实例方法。当然不可以了。null调用了方法。
+
+56.ajax 的 $.post 和 $.get方法， Controller层需要返回字符串 "OK" ，才能让 $.post 和 $.get后面的 function(data){} 继续执行
+
+57.配置 web.xml时 <init-param></init-param> 要在 <load-on-startup></load-on-startup>之前，否则报错
+
+58.出现 BeanNotFoundException(通常是Controller 或 Service)时，首先检查类上面是否加了 @Controller或 @Service注解，然后检查配置文件的 base-package 配置是否写对了
+
+59.spring中注入的都是接口，如 
+	@Autowired
+	private PersonDao personDao;
+   如果该接口有多个实现类，要使用 @Qualifier(value="") 接口进行指定
+
+60.maven项目有大红感叹号，查看下面的 problems，看有没有jar包失效，有的话，找到maven仓库jar包位置，删除jar，再 update project...
+
+61.eclipse安装插件（如sts）错误如下
+/**
+An error occurred while collecting items to be installed session context was:(profile=epp.package.jee, phase=org.eclipse.equinox.internal.p2.engine.phases.Collect, operand=, action=). No repository found containing: osgi.bundle,org.eclipse.net4j.jms.api,3.1.100.v20140218-1709
+**/
+可以在avaliable software sites 中添加
+name : Oracle Enterprise Pack for Eclipse
+location : http://download.oracle.com/otn_software/oepe/12.1.3.5/luna/repository/
+
+62.有异常是处理还是抛？
+   要看当前是否能处理这个异常（不是简单打印异常，是对发生的异常能做不同的反应，如给管理员发送邮件），要在处理业务逻辑的时候处理这个异常，像底层封装的工具类有异常只能抛
+
+63.吃了shit一样的失误
+    @Autowired
+    private RedisService redisService;
+    //看了上面没初始化，就把 下面的初始化为null了，其实上面是注入的 艹了狗了
+    private static final ObjectMapper MAPPER =null;
+
+    导致下面用MAPPER的时候出现空指针异常
+    改成
+   
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+64.springboot(或其它工程) 运行时出现“错误: 找不到或无法加载主类”，可能由于 JRE SYSTEM LIBRARY不对
+
+65.httpClient的 doXXX方法，如果没有返回值，那么 response.getEntity() 会报错 Entity may not be null
+   正确的方法是
+ 	    HttpEntity entity = response.getEntity();
+            // 判断 回复有没有数据
+            if (null == entity) {
+                return new HttpResult(response.getStatusLine().getStatusCode(), null);
+            }
+            return  new HttpResult(response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), "UTF-8"));
+
+66.出现空指针异常，也可能是mapper或service上面没写@Autowired，别看着是一个工程就认为可以直接用，这是靠spring扫描包才注册到spring容器的
+
+67.springmvc的controller层，如果返回值不是ResponseEntity，一定要加@ResponseBody注解进行json序列化
+
+68.有的依赖（如servlet-api），由于在tomcat容器中有，所以在pom.xml中添加时，运行可能报错，
+	java.util.concurrent.ExecutionException: org.apache.catalina.LifecycleException: Failed to start component [StandardEngine[Tomcat].StandardHost[localhost].StandardContext[]]
+	Failed to execute goal org.apache.tomcat.maven:tomcat7-maven-plugin:2.2:run (default-cli) on project taotao-order: Could not start Tomcat: Failed to start component 
+   必须在添加依赖时写<scope>provided</scope>，在运行时剔除该包
+
+69.一个很闹心的问题，在顶级域名www.taotao.com中设置 cookie后，在二级域名 cart.taotao.com拿不到设置的cookie的值。后来发现要在nginx的配置中加上proxy_set_header Host $host;这个设置在sso.taotao.com中也有
+
+二级域名能读取设置了domain为顶级域名（www.taotao.com）或自身的cookie，不能读取其它二级域名的cookie，
+顶级域名只能获取domain设置为顶级域名的cookie，不能获取二级域名的cookie。
+
+利用nginx的反向代理来解决cookie跨域问题，其实是通过 欺骗 浏览器来实现的，通过nginx，可以将不同工程下的cookie放到nginx域下，通过反向代理就可以取到不同工程写入的cookie
+
+70.shiro的web.xml配置中 
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		......
+	</filter>
+   DelegatingFilterProxy通过代理模式将spring容器中的bean和filter关联起来
+  （就是让shiro原本在servlet容器（web.xml）的filter可以在spring的容器中进行配置）
+
+71.springboot的 
+	@ImportSource : 我们必须写的xml配置文件通过此注解导入
+	@PropertySource : 像 xxx.properties 这样的 资源文件通过此注解导入，方便用@Value注解获取固定值
+
+72.Spring boot使用的内嵌的tomcat，而内嵌的tomcat是不支持jsp页面的，所有需要导入额外的包才能解决。
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+		<scope>provided</scope>
+	</dependency>
+
+73.这样子的情景，我们想把配置文件的信息，读取并自动封装成实体类，这样子，我们在代码里面使用就轻松方便多了，这时候，我们就可以使用@ConfigurationProperties，它可以把同类的配置信息自动封装成实体类
+
+①properties:
+connection.username=admin
+connection.password=kyjufskifas2jsfs
+
+②bean:
+@Component
+@ConfigurationProperties(prefix="connection")
+public class ConnectionSettings {
+
+    private String username;
+    private String password ;
+}
+
+③Controller:
+@RestController
+@RequestMapping("/task")
+public class TaskController {
+
+	@Autowired 
+	private ConnectionSettings conn;
+
+	@RequestMapping(value = {"/",""})
+	public String hellTask(){
+   	  String userName = conn.getUsername();     
+    	  return "hello task !!";
+}	}
+	
+75.netstat –ano | grep nginx 是查看占用的端口
+   ps –aux | grep nginx 是查看进程 （或ps -ef | grep nginx）
+
+76.web.xml里配置的 ContextLoaderListenner 作用
+- 在服务器启动时候，为每个项目创建一个ServletContext对象
+- 在ServletContext对象创建时候，使用监听器可以具体到ServletContext对象在什么时候创建
+- 使用监听器监听到ServletContext对象创建时候，
+- 加载spring配置文件，把配置文件配置对象创建
+- 把创建出来的对象放到ServletContext域对象里面（setAttribute方法）
+- 获取对象时候，到ServletContext域得到 （getAttribute方法）
+
+
+77. jq里的.remove()是直接清除元素，返回值是对删除节点的引用，可以继续使用
+    	  .empty()是清除元素里的内容 如 <li title="aa">aa</li>  -> <li title="aa"></li>
+
+78. 数据库范式
+  1NF : 表中每一列都是不可分割的数据项，例：由“职工号”，“姓名”，“电话号”组成的表（一个人可能有一部  办公电话和一部移动电话），这时将其规范化为第一范式可将 电话号分为 办公电话 和 移动电话，即（职工号，姓  名，办公电话，移动电话）
+  2NF ： 关系R为第一范式且非主属性需完全函数依赖于主属性。如选课关系表（学号，课程号，成绩，学分），主键  为（学号，课程号），由于非主属性 学分 部分函数依赖于主属性 课程号 ，会导致数据冗余和更新异常，可分解成  两个表 学生表（学号，课程号，成绩）课程表（课程号，学分）
+  3NF ： 关系R满足第二范式，且非主属性不传递依赖于主属性
+  BCNF ： 关系R满足第三范式，且每个属性都不传递依赖于主属性
+
+79. 单链表算法提示
+    ①可利用 hashTable或hashMap的键来排除重复数据
+    ②可利用双指针遍历来找到倒数第k个元素
+    ③可利用递归来从尾到头地输出链表
+    ④可利用双指针的速度（如a指针走一步，b指针走两步）来找到链表中间元素
+
+80.mybatis的mapper.xml中 会把 Integer 类型 的 值为 0 的数据 判断成空字符串 "",
+     <if test="state != null and state != ''">and sbc.state = #{state}</if>
+     这样，如果传的值就是0，会导致 and 语句拼不上
+     要改为
+     <if test="state != null">and sbc.state = #{state}</if>
+
+81. jsp页面中 a标签 onclick 到函数 ，传参时 字符串类型要加 单引号
+     <a id="feedBack" href="#" onclick="showModel(${company.id},'${company.dealtPerson}')">详情反馈</a>
+
+82. 用jq控制单选框的选中需要用prop属性，如
+ 	$("#theAll").prop("checked",false);
+    	$("#theOne").prop("checked",true); 
+
+83. 要想使用 rest 风格开发
+      在web.xml 的 DispatcherServlet 中 配置 为 "/"，同时在 springmvc 的配置中要配置
+       <mvc:default-servlet-handler/>
+
+84. 用ajax 有返回值时 浏览器报 406 可能是 没导入jackson包或 ajax没写 dataType : "json";‘
+      在js代码中使用el表达式，要用双引号包住
+
+85. controller中 return 要想用redirect到另一个方法中 ，直接写映射路径，如
+      方法①   @RequestMapping("/ret")
+      方法②   return "redirect:/ret";
+
+86.HashMap中，null可以作为键，这样的键只有一个；可以有一个或多个键所对应的值为null。当get()方法返回null值时，可能是 HashMap中没有该键，也可能使该键所对应的值为null。因此，在HashMap中不能由get()方法来判断HashMap中是否存在某个键， 而应该用containsKey()方法来判断
+
+87. List类型转array类型：List<Integer> arr2 = new ArrayList<Integer>();
+       		       arr2.add(1);  arr2.add(2);
+     		       Integer[] num2 = (Integer[]) arr2.toArray();
+      array类型转List类型： Integer[] nums = {1,2,3};
+       		        List<Integer> arr = Arrays.asList(nums);    不能转化基本数据类型的数组如 int[]
+88.String s ="a";与String s = new String("a");
+有本质的区别：前者是在字符串池里写入一个字符‘a’,然后用s指向它。此时a还不是对象
+                       后者是在堆上创建一个内容为“a”的字符串对象。       
+
+89. lock 和 synchronized 的区别
+     ① 一个线程获取了 synchronized 的锁，另一个线程只能等待它释放锁再操作，无限阻塞，而lock可以不让等待的线程一直无期限地等待下去（比如只等待一定的时间或者能够响应中断）用lock.tryLock()方法
+     ② 当有多个线程读写文件时，读操作和写操作会发生冲突现象，写操作和写操作会发生冲突现象，但是读操作和读操作不会发      生冲突现象。　　但是采用synchronized关键字来实现同步的话，就会导致一个问题：　　如果多个线程都只是进行读操作，       所以当一个线程在进行读操作时，其他线程只能等待无法进行读操作。　　因此就需要一种机制来使得多个线程都只是进行读       操作时，线程之间不会发生冲突，通过Lock就可以办到。用 ReadWriteLock
+     ③通过Lock可以知道线程有没有成功获取到锁。这个是synchronized无法办到的。
+     ④采用synchronized不需要用户去手动释放锁，当synchronized方法或者synchronized代码块执行完之后，系统会自动让线        程释放对锁的占用；而Lock则必须要用户去手动释放锁，如果没有主动释放锁，就有可能导致出现死锁现象
+     ⑤Lock是一个接口，使用lock需要导juc包，而synchronized是Java中的关键字，synchronized是内置的语言实现；
+
+90.spring容器什么时候注册bean？
+    ①、new CLassPathXmlApplicationContext("bean.xml");
+    ②、refresh();
+    ③、registerBeanPostProcessors();
+
+91.①HashMap 底层是数组 + 链表  默认长度为 16， 默认增长因子为 0.75
+     ②解决hash冲突的方法是 拉链法 和 开放地址法
+     ③拉链法是每次在链表头插节点
+     ④ rehash是 在 表个数超过 容量* 增长因子 的大小后进行，resize大小是原来的2倍
+     ⑤hashmap非线程安全体现于：
+	put 时候 若两节点指针共同指向链表头，会导致其中一个节点失效
+	resize时候有问题
+     ⑥concurrentHashMap 解决 线程安全问题是用 分段锁机制， 数个数据分一段，一段数据加一把锁，若使用size()等需要跨     段加锁的方法，需按端依次加锁，过后依次释放
+     ⑦HashMap其实就是一个Entry数组，Entry对象中包含了键和值，其中next也是一个Entry对象，它就是用来处理hash冲突的，形成一个链表。
+ 	static class Entry<K,V> implements Map.Entry<K,V> {    
+    	    final K key;    
+     	    V value;    
+     	    // 指向下一个节点    
+    	    Entry<K,V> next;    
+     	    final int hash;
+     ⑧放入元素，先用 hashcode函数算出 hash 值，再用 indexFor(int hash, int length)函数 ，使用 hash & (length - 1)计算索引位置，确定key在 数组中的位置， 最后用 equals方法， 比较key和value，值都一样就是冲突
+
+92. 数据库里 tinyint 类型 对用 java 的 Short 类型 
+
+93. 汉字转 utf-8 编码可以用 URLEncoder.encode("汉字","UTF-8");
+
+94.数据库分片(sharding)
+     （1）垂直分片：以表为单位，把不同的表分散到不同的数据库或主机上。特点是规则简单，实施方便，适合业务之间耦合度低的系统。
+     （2）水平分片：以行为单位，将同一个表中的数据按照某种条件拆分到不同的数据库或主机上。特点是相对复杂，适合单表巨大的系统。 
+     数据库分表：解决单表数据量巨大的问题（着眼单表数据大）
+     数据库分区：数据库表多，数据多，把业务相关的表放到一个db里（着眼数据表多）
+
+95. springboot的 @SpringBootApplication注解 包含 @SpringBootConfiguration @EnableAutoConfiguration            @ComponentScan等注解 默认扫描该主类所在的包和所有子包 ，所以最好放在最外层。如果放在内层，必须加上            @ComponentScan 和 @MapperScan 进行包扫描（注意，使用@ComponentScan 和 @MapperScan 后 原来的自动扫       描就失效了）
+
+96. 用 String 的 split 以 （点 "."） 分割时，不能直接写 String[] strs = str.split(".");
+      应该写 String[] strs = str.split("//."); 先转义一下 
+
+97. 模糊匹配代替 like 的方案
+      ① 正则表达式 regexp 例： select * from customer where address regexp '^北';     --> 找到所有含有 北 字的数据
+      ② instr 例： select * from customer where instr(address, '北') >0     --> 找到所有含有 北 字的数据
+	          select * from customer where instr(address, '北') =1     --> 找到所有以 北 字开头的数据 
+	          select * from customer where instr(address, '北') =0     --> 找到所有不含 北 字的数据
+			  
+98. 查询日志中出现制定字符串的个数
+    grep -io "cmb" etcp-paycenter.log | wc -l
