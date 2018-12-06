@@ -1,0 +1,20 @@
+public class ttt{ 
+ @org.junit.Test
+    public void testInt() {
+        Integer length = 30;
+        long startTime = System.currentTimeMillis();
+        double ways = getStep(length);
+        long endTime = System.currentTimeMillis();
+        System.out.println("运算耗时：" + (endTime - startTime) +" 毫秒");
+        System.out.println("共有：" + ways + " 种方法");
+    }
+
+	// 递归法
+    public static double getStep(Integer step){
+        if(step <= 2)
+        return step;
+
+        return getStep(step - 2) + getStep(step - 1);
+    }
+	
+}
