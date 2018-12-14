@@ -475,7 +475,7 @@ public class TaskController {
      ⑤hashmap非线程安全体现于：
 	put 时候 若两节点指针共同指向链表头，会导致其中一个节点失效
 	resize时候有问题
-     ⑥concurrentHashMap 解决 线程安全问题是用 分段锁机制， 数个数据分一段，一段数据加一把锁，若使用size()等需要跨     段加锁的方法，需按端依次加锁，过后依次释放
+     ⑥concurrentHashMap 解决 线程安全问题是用 分段锁机制(jdk1.7)， 数个数据分一段，一段数据加一把锁，若使用size()等需要跨     段加锁的方法，需按端依次加锁，过后依次释放
      ⑦HashMap其实就是一个Entry数组，Entry对象中包含了键和值，其中next也是一个Entry对象，它就是用来处理hash冲突的，形成一个链表。
  	static class Entry<K,V> implements Map.Entry<K,V> {    
     	    final K key;    
@@ -508,3 +508,11 @@ public class TaskController {
 			  
 98. 查询日志中出现制定字符串的个数
     grep -io "cmb" etcp-paycenter.log | wc -l
+	
+99. 可以用作 GC-Roots 的对象有:
+	方法区中静态变量所引用的对象 / 虚拟机栈中所引用的对象。
+	
+100. JDK1.8中HashMap与JDK1.7中有很多地方不一样
+	①、1.8中引入了红黑树，而1.7中没有
+	②、1.8中元素是插在链表的尾部，而1.7中新元素是插在链表的头部
+	③、扩容的时候，1.8中不会出现死循环，而1.7中容易出现死循环，而且链表不会倒置

@@ -1,0 +1,13 @@
+https://tech.meituan.com/Java_Lock.html		不可不说的Java“锁”事
+https://tech.meituan.com/Redis_Rehash_Practice_Optimization.html		美团针对Redis Rehash机制的探索和实践
+https://tech.meituan.com/jvm_optimize.html		从实际案例聊聊Java应用的GC优化
+https://tech.meituan.com/clean_code.html		聊聊clean code
+https://tech.meituan.com/performance_tunning.html		常见性能优化策略的总结
+https://tech.meituan.com/nio.html		Java NIO浅析
+https://tech.meituan.com/mt_trip_springmvc_service_annotation_problem_research.html		Spring MVC注解故障追踪记
+https://tech.meituan.com/g1.html		Java Hotspot G1 GC的一些关键技术
+https://tech.meituan.com/java_hashmap.html		Java 8系列之重新认识HashMap
+https://tech.meituan.com/serialization_vs_deserialization.html		序列化和反序列化
+https://tech.meituan.com/mt_crm_quartz.html		Quartz应用与集群原理分析
+https://tech.meituan.com/innodb_lock.html		Innodb中的事务隔离级别和锁的关系
+https://tech.meituan.com/mysql_index.html		MySQL索引原理及慢查询优化

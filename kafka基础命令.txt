@@ -1,0 +1,13 @@
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1  --partitions 1 --topic Hello-Kafka   //创建topic
+
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 —topic Hello-Kafka --from-beginning
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 —topic test --from-beginning --whitelist test
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 -partitions 1 --topic haha
+	
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic Multibrokerapplication
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 —topic test --from-beginning
+
+bin/kafka-console-producer.sh --broker-list 192.168.56.101:9092 --topic test
+bin/kafka-console-consumer.sh --zookeeper 192.168.56.101:2181 —topic zhangx --from-beginning --whitelist zhangx
+
+bin/kafka-topics.sh --list --zookeeper localhost:2181
