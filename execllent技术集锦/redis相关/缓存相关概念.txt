@@ -1,0 +1,1 @@
+缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级   https://www.cnblogs.com/leeSmall/p/8594542.html

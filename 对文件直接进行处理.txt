@@ -1,0 +1,25 @@
+private static boolean modifyFileContent(File file) {
+        RandomAccessFile raf = null;
+        try {
+            raf = new RandomAccessFile(file, "rw");
+            String line = null;
+            long lastPoint = 0; //记住上一次的偏移量
+            while ((line = raf.readLine()) != null) {
+                final long ponit = raf.getFilePointer();
+                // 此处正则表达式 进行替换
+                String str = line.replaceAll("\\s{1,}", ",`");
+                raf.seek(lastPoint);
+                raf.writeBytes(str);
+                lastPoint = ponit;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                raf.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }

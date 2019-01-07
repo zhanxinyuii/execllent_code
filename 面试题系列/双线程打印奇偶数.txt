@@ -1,0 +1,70 @@
+public class PrintTest {
+    private Integer count=0;
+    /**
+     * 方法1：对 flag 的写入虽然加锁保证了线程安全，但读取的时候如果 不是 volatile 所以可能会读取到旧值
+     * 方法2：使用 AtomicBoolean
+     */
+    private AtomicBoolean flag = new AtomicBoolean(true);
+
+    private static final Lock lock = new ReentrantLock();
+
+    public static void main(String[] args) {
+        PrintTest pt = new PrintTest();
+
+        Thread printJi = new Thread(new PrintJi(pt));
+        printJi.setName("奇线程");
+
+        Thread printOu = new Thread(new PrintOu(pt));
+        printOu.setName("偶线程");
+
+        printJi.start();
+        printOu.start();
+    }
+
+    public static class PrintJi implements  Runnable{
+        private PrintTest pt;
+
+        public PrintJi(PrintTest pt) {
+            this.pt = pt;
+        }
+
+        @Override
+        public void run() {
+            while(pt.count <= 1000){
+                if(!pt.flag.get()){
+                    try{
+                        lock.lock();
+                        System.out.println(Thread.currentThread().getName() + " 打印 " + pt.count);
+                        pt.count++;
+                        pt.flag.set(!pt.flag.get());
+                    }finally {
+                        lock.unlock();
+                    }
+                }
+            }
+        }
+    }
+    public static class PrintOu implements  Runnable{
+        private PrintTest pt;
+
+        public PrintOu(PrintTest pt) {
+            this.pt = pt;
+        }
+
+        @Override
+        public void run() {
+            while(pt.count <= 1000){
+                if(pt.flag.get()){
+                    try{
+                        lock.lock();
+                        System.out.println(Thread.currentThread().getName() + " 打印 " + pt.count);
+                        pt.count++;
+                        pt.flag.set(!pt.flag.get());
+                    }finally {
+                        lock.unlock();
+                    }
+                }
+            }
+        }
+    }
+}
