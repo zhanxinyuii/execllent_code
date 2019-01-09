@@ -1,0 +1,15 @@
+该操作的实现原理是通过判断插入的记录里是否存在主键冲突来决定是插入还是更新，
+当出现主键冲突时则进行更新操作（使用 ON DUPLICATE KEY UPDATE 语句后面的参数），若无冲突则进行插入操作。
+
+INSERT INTO t_pro_gift
+        (id, 
+        name,
+        age )
+VALUES 
+        (1,
+        'hello',
+        24)
+    ON DUPLICATE KEY UPDATE
+        id = 1,
+        name = 'world',
+        age = 55
