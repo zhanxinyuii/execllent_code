@@ -1,0 +1,28 @@
+	@Test
+    public void testJoiner(){
+        // 用 "null" 字符串代替 null
+        Joiner joiner = Joiner.on(",").useForNull("null");
+        // 不拼 null
+        joiner = Joiner.on(",").skipNulls();
+
+        String str = joiner.join("a", "b", "c", null, "d");
+        System.out.println(str);
+        // 传入 list 类型
+        List<String> list = new ArrayList<>();
+        str = joiner.join(list);
+        System.out.println(str);
+    }
+
+    @Test
+    public void testSpliter(){
+        ArrayList<String> arr =
+                 Lists.newArrayList(
+                     Splitter
+                    .on(',')
+                 // .onPattern("\r?\n")          // 按正则表达式拆分
+                    .trimResults()                 // 移除结果字符串的前导空白和尾部空白
+                    .omitEmptyStrings()            // 从结果中自动忽略空字符串
+                    .split(",   a,,b   ,")
+                 );
+        System.out.println(arr);
+    }

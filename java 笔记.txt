@@ -541,6 +541,10 @@ public class TaskController {
 	  2） 将对象存入Set时。		
 	  上述两种情况，都需要使用hashCode和equals比较对象，默认的实现会比较是否同一个对象（对象的引用相等）
 	  
+	  所以什么时候才适合覆盖equals方法呢？如果一个类有自己的逻辑相等概念而不仅仅是对象相等，而且超类没有覆盖equals方法时，我们就应该去覆盖。这通常属于“值类”的情形。
+	  值类是指那些表示一个值的类，如Integer或者String。程序员使用equals方法来比较两个值对象的引用时总是希望看它们是否逻辑相等，而不是看它们是否指向同一个对象。
+	  覆盖equals方法不仅能满足程序员的需求，而且能将对应的实例作为映射表（map）的键（key）或者集合（set）的元素，使得映射表或集合表现出预期的行为。
+	  
 105. 对确定输出，而且频繁输出的日志，采用直接拼装字符串的方式 （logger.info("I am a business log with id: " + id + " symbol: " + symbol)）
 	 Slf4j的占位符并没有魔术，每次输出日志都要进行占位符的查找，字符串的切割与重新拼接	
 	 
@@ -556,3 +560,11 @@ public class TaskController {
 	 ① 影响索引
 	 ② Null占地比空字符串大
 	 ③ 业务操作有 null 易报错
+	 
+109. 第三方jar包上传到私服的正确 mvn 命令
+	 mvn deploy:deploy-file -DgroupId=COM.CCB -DartifactId=netpay -Dversion=1.0 -Dpackaging=jar -Dfile=C:\bos_repository\com\ccb\netpay.jar 
+     -Durl=http://10.105.22.201:8081/nexus/content/repositories/releases/ -DrepositoryId=etcp-release 
+
+110. FixedThreadPool和SingleThreadExecutor使用无界队列LinkedBlockingQueue作为线程池的工作队列。CachedThreadPool使用没有容量的SynchronousQueue作为线程池的工作队列，但
+	 CachedThreadPool的maximumPool是无界的。这意味着，如果主线程提交任务的速度高于maximumPool中线程处理任务的速度时，CachedThreadPool会不断创建新线程。极端情况下，
+	 CachedThreadPool会因为创建过多线程而耗尽CPU和内存资源。	 

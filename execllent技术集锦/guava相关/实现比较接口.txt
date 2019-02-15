@@ -1,0 +1,85 @@
+
+public class Student implements Comparable<Student> {
+
+    private int number;
+    private String name;
+    private float score;
+
+    public Student(int number, String name, float score) {
+        this.number = number;
+        this.name = name;
+        this.score = score;
+    }
+
+    //排序优先级number-name-score
+    @Override
+    public int compareTo(Student c) {
+        // 如果number不等按number排序（增序
+        if (this.number != c.number) {
+            return this.number > c.number ? 1 : -1;
+        } else {
+            // 如果number和name都相等按score排序（降序）
+            if (this.name.equals(c.name)) {
+                return this.score < c.score ? 1 : -1;
+            }
+            // 如果number相等按name排序（增序）
+            return this.name.compareTo(c.name) > 0 ? 1 : -1;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Student [number=" + number + ", name=" + name + ", score=" + score + "]";
+    }
+
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<Student>() {
+            {
+                add(new Student(1, "a", 2));
+                add(new Student(3, "a", 3));
+                add(new Student(7, "a", 5));
+                add(new Student(5, "a", 2));
+                add(new Student(3, "a", 2));
+                add(new Student(7, "c", 2));
+                add(new Student(1, "b", 5));
+                add(new Student(7, "a", 2));
+                add(new Student(7, "c", 10));
+
+            }
+        };
+
+        Collections.sort(students);
+        for (Student student : students) {
+            System.out.println(student);
+        }
+    }
+}
+
+输出结果为:
+
+Student [number=1, name=a, score=2.0]
+Student [number=1, name=b, score=5.0]
+Student [number=3, name=a, score=3.0]
+Student [number=3, name=a, score=2.0]
+Student [number=5, name=a, score=2.0]
+Student [number=7, name=a, score=5.0]
+Student [number=7, name=a, score=2.0]
+Student [number=7, name=c, score=10.0]
+Student [number=7, name=c, score=2.0]
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+这部分代码太琐碎了，因此很容易搞乱，也很难调试。我们应该能把这种代码变得更优雅，为此，Guava提供了ComparisonChain。
+
+ComparisonChain执行一种懒比较：它执行比较操作直至发现非零的结果，在那之后的比较输入将被忽略。
+
+ @Override
+    public int compareTo(Student that) {
+        return ComparisonChain.start()
+                .compare(this.number, that.number)
+                .compare(this.name, that.name)
+                .compare(this.score, that.score, Ordering.natural().reverse())		// 分数倒序排
+                .result();
+    }
+	
+这种Fluent接口风格的可读性更高，发生错误编码的几率更小，并且能避免做不必要的工作。

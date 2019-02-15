@@ -1,0 +1,30 @@
+ @Test
+    public void testTable() {
+        HashBasedTable<String, String, Integer> scoreTable = HashBasedTable.create();
+
+        scoreTable.put("zhangsan", "math", 99);
+        scoreTable.put("zhangsan", "art", 87);
+        scoreTable.put("lisi", "math", 67);
+        scoreTable.put("lisi", "art", 84);
+        scoreTable.put("wangwu", "chinese", 90);
+        // 获取对应的map值
+        Map<String, Integer> row = scoreTable.row("zhangsan");
+        Map<String, Integer> column = scoreTable.column("math");
+        Integer score = scoreTable.get("wangwu", "chinese");
+        // 判存
+        System.out.println(scoreTable.containsColumn("math"));
+        System.out.println(scoreTable.containsRow("zhaoliu"));
+        System.out.println(scoreTable.containsValue(67));
+        // 获取 行，列 对应 Map
+        Map<String, Map<String, Integer>> columnMap = scoreTable.columnMap();
+        Map<String, Map<String, Integer>> rowMap = scoreTable.rowMap();
+        System.out.println(columnMap);
+        System.out.println(rowMap);
+        // 获取 行，列 对应 Set
+        Set<String> rowKeySet = scoreTable.rowKeySet();
+        Set<String> columnKeySet = scoreTable.columnKeySet();
+        Set<Integer> values = (Set<Integer>) scoreTable.values();
+        System.out.println(rowKeySet);
+        System.out.println(columnKeySet);
+        System.out.println(values);
+    }

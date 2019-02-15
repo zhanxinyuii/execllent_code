@@ -1,0 +1,27 @@
+CaseFormat是一种实用工具类，以提供不同的ASCII字符格式之间的转换。
+
+S.N.	枚举常量和说明
+1		LOWER_CAMEL
+		Java变量的命名规则，如“lowerCamel”。
+2		LOWER_HYPHEN
+		连字符连接变量的命名规则，如“lower-hyphen”。
+3		LOWER_UNDERSCORE
+		C ++变量命名规则，如“lower_underscore”。
+4		UPPER_CAMEL
+		Java和C++类的命名规则，如“UpperCamel”。
+5		UPPER_UNDERSCORE
+		Java和C++常量的命名规则，如“UPPER_UNDERSCORE”
+		
+		
+S.N.	方法及说明
+1		Converter<String,String> converterTo(CaseFormat targetFormat)
+		返回一个转换，从这个格式转换targetFormat字符串。
+2		String to(CaseFormat format, String str)
+		从这一格式指定格式的指定字符串 str 转换。
+		
+示例：
+	@Test
+    public void testFormat(){
+        String sendToHer = CaseFormat.LOWER_UNDERSCORE.to(LOWER_CAMEL, "send_to_her");
+        System.out.println(sendToHer);					// "sendToHer"
+    }		

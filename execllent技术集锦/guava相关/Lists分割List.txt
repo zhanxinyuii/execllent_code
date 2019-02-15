@@ -1,0 +1,13 @@
+partition(List, int)	把List按指定大小分割
+
+ @Test
+    public void testParti(){
+        List countUp = Ints.asList(1, 2, 3, 4, 5, 6, 7, 8);
+        List<List> partition = Lists.partition(countUp, 3);
+        for(List arrList : partition){
+            System.out.println(arrList.toString());
+        }
+    }
+	//   [1, 2, 3]
+	//   [4, 5, 6]
+	//   [7, 8]

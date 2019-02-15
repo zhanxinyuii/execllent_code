@@ -1,0 +1,27 @@
+传统上，实现键值对的双向映射需要维护两个单独的map，并保持它们间的同步。但这种方式很容易出错，而且对于值已经在map中的情况，会变得非常混乱。例如：
+
+Map<String, Integer> nameToId = Maps.newHashMap();
+Map<Integer, String> idToName = Maps.newHashMap();
+
+nameToId.put("Bob", 42);
+idToName.put(42, "Bob");
+
+//如果"Bob"和42已经在map中了，会发生什么?
+//如果我们忘了同步两个map，会有诡异的bug发生...
+BiMap<K, V>是特殊的Map：
+
+可以用 inverse()反转BiMap<K, V>的键值映射
+
+	@Test
+    public void testBiMap(){
+        BiMap<String,Integer> map =  HashBiMap.create();
+        map.put("age",21);
+        map.put("score",23);
+
+        BiMap<Integer, String> inverseMap = map.inverse();
+        String type1 = inverseMap.get(21);
+        String type2 = inverseMap.get(23);
+
+        System.out.println( type1 + " 21 " + type2 + " 23 " );
+
+    }

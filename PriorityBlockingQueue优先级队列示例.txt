@@ -1,0 +1,46 @@
+public class BinTest {
+
+    public static void main(String[] args) {
+        PriorityBlockingQueue<Girl> queue = new PriorityBlockingQueue<>();
+
+        for(int i=0; i<10; i++){
+            Girl Girl = new Girl();
+            int age =  (int)((Math.random() * 20) + 10) ;
+            Girl.setAge(age);
+
+            queue.add(Girl);
+        }
+
+        while(!queue.isEmpty()){
+            Girl Girl = queue.poll();
+            System.out.println(Girl.getAge() + " 岁的女孩最可爱 " );
+        }
+    }
+
+}
+
+class Girl implements Comparable<Girl>{
+    Integer age;
+    Integer name;
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getName() {
+        return name;
+    }
+
+    public void setName(Integer name) {
+        this.name = name;
+    }
+
+    @Override
+    public int compareTo(Girl Girl) {
+        return this.age.compareTo(Girl.getAge());
+    }
+}

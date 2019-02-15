@@ -14,7 +14,7 @@
             sb.append(strs1[i] + "b");
         }
         String finalStr = sb.toString();
-
+
         // 第二种方法 适用于在第一次出现b的后面加字符串
         int index = str.indexOf("b");
         StringBuilder sb2 = new StringBuilder(str);
@@ -27,3 +27,5 @@
         String finalStr3 = strs[0] + "bz" + strs[1];
 
     }
+	
+
