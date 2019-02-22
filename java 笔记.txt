@@ -568,3 +568,5 @@ public class TaskController {
 110. FixedThreadPool和SingleThreadExecutor使用无界队列LinkedBlockingQueue作为线程池的工作队列。CachedThreadPool使用没有容量的SynchronousQueue作为线程池的工作队列，但
 	 CachedThreadPool的maximumPool是无界的。这意味着，如果主线程提交任务的速度高于maximumPool中线程处理任务的速度时，CachedThreadPool会不断创建新线程。极端情况下，
 	 CachedThreadPool会因为创建过多线程而耗尽CPU和内存资源。	 
+	 
+111. 查看占用端口的进程号： netstat -ntlp | grep 10101 	 
